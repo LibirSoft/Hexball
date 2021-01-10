@@ -32,11 +32,14 @@ const drawText = (text, x, y, color) => {
     ctx.fillText(text, x, y)
 }
 
-var drawball = (x,y,r,c,c2) => {
+var drawball = (x,y,r,c) => {
     drawCircleF(x, y, r, c)
-    drawCircleS(x, y, r + 1, 2, c2)
+    drawCircleS(x, y, r + 1, 2, '#fff')
 }
-
+var drawplayer =(player) =>{
+    drawCircleF(player.x,player.y,player.radius,player.color)
+    drawCircleS(player.x, player.y, player.radius + 1, 2, '#111')
+}
 var drawgoal = (x,b,r)=>{
 
     drawCircleF(x, (canvas.height/5)*2-b, r, '#fff')
@@ -170,7 +173,7 @@ const render = () => {
 
     //************* DRAW MAP *************/
     drawMap()
-
+/*
     //kullanıcı 1 skor
     drawText(user.score, canvas.width / 4, 100, '#fff')
     //kullancı 2 skor
@@ -180,9 +183,12 @@ const render = () => {
     drawRect(user.x, user.y, user.w, user.h, '#fff')
     //kullanıcı 2 nin raketi
     drawRect(user2.x, user2.y, user2.w, user2.h, '#fff')
-
+*/
     //topu çizdirme
-    drawball()
+    drawball(ball.x,ball.y,ball.r,ball.color)
+    for(var i in Players){
+       drawplayer(Players[i])
+    }
 
 }
 const update = () =>{
@@ -211,10 +217,11 @@ const game = () => {
 
     
     update()
+    render()
 
 }
 
 const fps = 120
 setInterval(game, 1000 / fps)
 
-drawMap()
+
