@@ -1,2 +1,2 @@
 # Hexball-Clone
- this is opensource hexbal-clone :)
+ this is opensource hexbal-clone
