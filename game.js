@@ -32,11 +32,14 @@ const drawText = (text, x, y, color) => {
     ctx.fillText(text, x, y)
 }
 
-var drawball = (x,y,r,c,c2) => {
+var drawball = (x,y,r,c) => {
     drawCircleF(x, y, r, c)
-    drawCircleS(x, y, r + 1, 2, c2)
+    drawCircleS(x, y, r + 1, 2, '#fff')
 }
-
+var drawplayer =(player) =>{
+    drawCircleF(player.x,player.y,player.radius,player.color)
+    drawCircleS(player.x, player.y, player.radius + 1, 2, '#111')
+}
 var drawgoal = (x,b,r)=>{
 
     drawCircleF(x, (canvas.height/5)*2-b, r, '#fff')
@@ -78,6 +81,7 @@ var ball = {
 class Player{
      speed=0;
      radius=25;
+    isMovingDown = false; isMovingUp = false; isMovingRight = false; isMovingLeft = false;
     constructor(x,y,color){
         this.x=x
         this.y=y
@@ -87,8 +91,6 @@ class Player{
     }
 
 }
-var player1 = new Player(50,50,'#fff')
-
 
 
 
@@ -110,10 +112,17 @@ var user = {
 
 var Players =[]
 
+var player1 = new Player(50,50,'#fff')
+
+var player2 = new Player(150,50,'#fff')
+
+var playerControlIndex = 0;
+
 Players.push(player1)
-   console.log(Players[0].radius) 
+Players.push(player2)
 
 
+var selectedPlayer = Players[playerControlIndex];
 
 
 
@@ -125,17 +134,22 @@ function userKeyDown(e){
 
 
     if(e.code === 'KeyW'){
-        user.isMovingDown = true;
+        selectedPlayer.isMovingDown = true;
     }
 
     if(e.code === 'KeyS'){
-        user.isMovingUp = true;
+        selectedPlayer.isMovingUp = true;
     }
     if(e.code === 'KeyD'){
-        user.isMovingRight = true;
+        selectedPlayer.isMovingRight = true;
     }
     if(e.code === 'KeyA'){
-        user.isMovingLeft = true;
+        selectedPlayer.isMovingLeft = true;
+    }
+
+    if(e.code === 'KeyF'){
+        playerControlIndex = (playerControlIndex == 0)? 1 : 0;
+        selectedPlayer = Players[playerControlIndex];
     }
 
    
@@ -145,18 +159,18 @@ document.addEventListener('keydown', userKeyDown)
 
 function userKeyUp(e){
     if(e.code === 'KeyW'){
-        user.isMovingDown = false;
+        selectedPlayer.isMovingDown = false;
     }
 
     if(e.code === 'KeyS'){
-        user.isMovingUp = false;
+        selectedPlayer.isMovingUp = false;
     }
 
      if(e.code === 'KeyD'){
-        user.isMovingRight = false;
+        selectedPlayer.isMovingRight = false;
     }
     if(e.code === 'KeyA'){
-        user.isMovingLeft = false;
+        selectedPlayer.isMovingLeft = false;
     }
 
    
@@ -170,7 +184,7 @@ const render = () => {
 
     //************* DRAW MAP *************/
     drawMap()
-
+/*
     //kullanıcı 1 skor
     drawText(user.score, canvas.width / 4, 100, '#fff')
     //kullancı 2 skor
@@ -180,25 +194,30 @@ const render = () => {
     drawRect(user.x, user.y, user.w, user.h, '#fff')
     //kullanıcı 2 nin raketi
     drawRect(user2.x, user2.y, user2.w, user2.h, '#fff')
-
+*/
     //topu çizdirme
-    drawball()
+    drawball(ball.x,ball.y,ball.r,ball.color)
+
+    //DRAW PLAYERS
+    for(var i in Players){
+       drawplayer(Players[i])
+    }
 
 }
 const update = () =>{
 
-    if(user.isMovingLeft){
-        x-= 4;
+    if(selectedPlayer.isMovingLeft){
+        selectedPlayer.x-= 4;
     }
-    if(user.isMovingRight){
-        x+= 4;
+    if(selectedPlayer.isMovingRight){
+        selectedPlayer.x+= 4;
     }
 
-    if(user.isMovingUp){
-        y-= 4;
+    if(selectedPlayer.isMovingUp){
+        selectedPlayer.y+= 4;
     }
-    if(user.isMovingDown){
-        y+= 4;
+    if(selectedPlayer.isMovingDown){
+        selectedPlayer.y-= 4;
     }
 
 
@@ -211,10 +230,11 @@ const game = () => {
 
     
     update()
+    render()
 
 }
 
 const fps = 120
 setInterval(game, 1000 / fps)
 
-drawMap()
+
