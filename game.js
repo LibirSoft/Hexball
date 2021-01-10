@@ -159,6 +159,19 @@ const render = () => {
 }
 const update = () =>{
 
+    if(user.isMovingLeft){
+        x-= 4;
+    }
+    if(user.isMovingRight){
+        x+= 4;
+    }
+
+    if(user.isMovingUp){
+        y-= 4;
+    }
+    if(user.isMovingDown){
+        y+= 4;
+    }
 
 
 
