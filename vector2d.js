@@ -21,6 +21,10 @@ class vector2d{
         return Math.sqrt(x * x + y * y);
     }
 
+    dist(_vector){
+        return Math.sqrt(Math.pow(this.x - _vector.x, 2) + Math.pow(this.y - _vector.y, 2));
+    }
+
     norm(){
         r = 1 / this.mag();
         return vector2d(x * r, y * r);
